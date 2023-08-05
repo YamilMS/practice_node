@@ -1,5 +1,6 @@
 require('dotenv').config()
 let express = require('express');
+const bodyParser= require('body-parser')
 let app = express();
 
 console.log("Hello World");
@@ -9,6 +10,10 @@ app.get('/', (req, res) => {
     res.send('Hello Express');
 })
 */
+
+//This is used to parse the body of the request and return the body as a json object or a querystring
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //This function is a middleware that log the request showing the method, route and ip of the request. We need to call the next()
 // function to continue the execution of the rest of the code.
@@ -56,6 +61,12 @@ app.get('/name', (req, res) => {
     const firstName = req.query.first; // first is the name of the parameter
     const lastName = req.query.last; // last is the name of the parameter
    //another way: const {first: firstName, last: lastName} = req.query
+    res.json({name: `${firstName} ${lastName}`});
+})
+
+//Here is the post request, in order to access to the body we need to use the body-parser and after we can manage with req.body
+app.post('/name', (req, res) => {
+    const {first: firstName, last: lastName} = req.body
     res.json({name: `${firstName} ${lastName}`});
 })
 
